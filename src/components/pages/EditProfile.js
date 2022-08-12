@@ -1,126 +1,102 @@
 import {useState} from "react";
-import PropTypes from 'prop-types';
 import {useNavigate} from "react-router-dom";
 import {
+    Alert,
     Box,
-    Button,
     FormControl,
     FormControlLabel,
-    FormLabel, Radio,
+    InputLabel,
+    MenuItem,
+    Radio,
     RadioGroup,
-    Tab,
-    Tabs,
+    Select,
     TextField,
-    Typography
 } from "@mui/material";
+import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from "@mui/icons-material/Save";
 import SimplePage from "../SimplePage";
+import FormLine from "../FormLine";
 
-const FormLine = ({children, ...props}) =>
-    (<Box sx={{maxWidth: 500, my: 2, ...props}}>
-        {children}
-    </Box>);
-FormLine.propTypes = {
-    children: PropTypes.node
-};
 
-function TabPanel(props) {
-    const {children, value, index, ...other} = props;
+export default function EditProfile({account}) {
+    const [data, setData] = useState(account.account);
+    const [saveProcess, setSaveProcess] = useState(undefined);
 
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && (
-                <Box>
-                    <Typography>{children}</Typography>
-                </Box>
-            )}
-        </div>
-    );
-}
-
-TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
-};
-
-export default function EditProfile() {
-    const navigate = useNavigate();
-    const [data, setData] = useState({
-        lastName: "Петров",
-        firstName: "Николай",
-        patronymic: "Иванович",
-        region: "Ленинградская область",
-        step: 0,
-        schoolClass: 9,
-    });
+    const updateField = (fieldName, format = x => x) =>
+        (e) => setData(d => ({...d, [fieldName]: format(e.target.value)}));
+    const save = () => {
+        setSaveProcess("loading");
+        account.updateProfile(data).then(r => r ? setSaveProcess(undefined) : setSaveProcess("fail"))
+    }
 
     return (<SimplePage title="Изменить профиль">
         <FormLine><TextField
             required
-            id="outlined-required"
             label="Фамилия"
-            defaultValue={data.lastName}
+            defaultValue={data.last_name}
+            onChange={updateField("last_name")}
             fullWidth
         /></FormLine>
         <FormLine><TextField
             required
-            id="outlined-required"
             label="Имя"
-            defaultValue={data.firstName}
+            defaultValue={data.first_name}
+            onChange={updateField("first_name")}
             fullWidth
         /></FormLine>
         <FormLine><TextField
             required
-            id="outlined-required"
             label="Отчество"
             defaultValue={data.patronymic}
+            onChange={updateField("patronymic")}
             fullWidth
         /></FormLine>
 
         <FormLine>
             <FormControl>
-                <RadioGroup row value={"scholar"}>
-                    <FormControlLabel value="scholar" control={<Radio/>} label="Школьник"/>
-                    <FormControlLabel value="entrant" control={<Radio/>} label="Выпускник школы"/>
-                    <FormControlLabel value="student" control={<Radio/>} label="Студент"/>
+                <RadioGroup row value={data.step} onChange={e => {
+                    updateField("step", Number.parseInt)(e);
+                }}>
+                    <FormControlLabel value={0} control={<Radio/>} label="Школьник"/>
+                    <FormControlLabel value={1} control={<Radio/>} label="Выпускник школы"/>
+                    <FormControlLabel value={2} control={<Radio/>} label="Студент"/>
                 </RadioGroup>
             </FormControl>
         </FormLine>
 
-        <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
-            <Tabs value={data.step} onChange={(_, s) => setData(d => ({...d, step: s}))}>
-                <Tab label="Школьник"/>
-                <Tab label="Выпускник"/>
-                <Tab label="Студент"/>
-            </Tabs>
-        </Box>
-        <TabPanel value={data.step} index={0}>
-            <FormLine><TextField
-                required
-                id="outlined-required"
-                label="Класс в школе"
-                inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-                defaultValue={data.schoolClass}
-                fullWidth
-            /></FormLine>
-        </TabPanel>
-        <TabPanel value={data.step} index={1}>
-            Item Two
-        </TabPanel>
-        <TabPanel value={data.step} index={2}>
-            Item Three
-        </TabPanel>
+        {(data.step === 0 || data.step === 1) && <FormLine>
+            <FormControl fullWidth>
+                <InputLabel id="school-class-select-label">Класс в школе</InputLabel>
+                <Select
+                    labelId="school-class-select-label"
+                    id="school-class-select"
+                    value={data.school_class ?? 9}
+                    label="Класс в школе"
+                    onChange={updateField("school_class")}
+                >
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n =>
+                        <MenuItem value={n} key={n}>{n}</MenuItem>)}
+                </Select>
+            </FormControl>
+        </FormLine>}
 
+        {data.step !== undefined && <FormLine>
+            <TextField
+                label="Название школы"
+                defaultValue={data.school_name ?? ""}
+                onChange={updateField("school_name")}
+                fullWidth
+            />
+        </FormLine>}
+
+        {saveProcess === "fail" && <Alert severity="error">Не удалось сохранить изменения профиля!</Alert>}
         <Box sx={{mt: 1, mb: 2}}>
-            <Button variant="contained" endIcon={<SaveIcon/>}
-                    onClick={() => navigate("/profile")}>Сохранить</Button>
+            <LoadingButton
+                variant="contained"
+                endIcon={<SaveIcon/>}
+                loading={saveProcess === "loading"}
+                loadingPosition="end"
+                onClick={save}>Сохранить</LoadingButton>
         </Box>
 
     </SimplePage>);

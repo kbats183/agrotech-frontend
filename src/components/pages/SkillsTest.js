@@ -33,7 +33,7 @@ const SkillSlider = (props) =>
     />);
 
 const TestQuestion = ({question, ...props}) =>
-    (<Grid container spacing={2}>
+    (<Grid container spacing={2} sx={{my: 2}}>
         <Grid item xs={8}>
             {question}
         </Grid>
