@@ -1,4 +1,4 @@
-import {useEffect, useState} from "react";
+import {useEffect, useState, createContext} from "react";
 import useCookie, {setCookie} from 'react-use-cookie';
 import {API_PATH} from "../config";
 
@@ -62,3 +62,7 @@ export const useAccount = () => {
 
     return {account, registration, authorize, logout, updateProfile};
 };
+
+export const AccountContext = createContext({});
+export const AccountProvider = AccountContext.Provider;
+export default AccountContext;

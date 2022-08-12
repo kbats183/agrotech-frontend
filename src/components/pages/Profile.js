@@ -98,15 +98,14 @@ function Authorization({account}) {
 function ProfileDetails({account}) {
     const navigate = useNavigate();
     const user = account.account;
-    console.log(user.step, user);
     return (<SimplePage title="Профиль">
         <Typography variant="h4">{user.last_name} {user.first_name} {user.patronymic}</Typography>
 
         <Typography variant="h6">
-            {user.step === 0 && "Школьник, " + (user.school_class !== undefined && user.school_class + " класс")}
-            {user.step === 1 && "Выпускник, " + (user.school_class !== undefined && user.school_class + " класс")}
+            {user.step === 0 && "Школьник"}
+            {user.step === 1 && "Выпускник"}
+            {(user.step === 0 || user.step === 1) && (user.school_class && ", " + user.school_class + " класс")}
             {user.step === 2 && "Студент, "}
-
         </Typography>
 
         <Box sx={{mt: 1, mb: 2}}>

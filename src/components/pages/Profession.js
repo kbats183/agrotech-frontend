@@ -1,11 +1,25 @@
 import SimplePage from "../SimplePage";
-import {ProfessionCard} from "../ProfessionCard";
+import {ProfessionInfo} from "../ProfessionCard";
 import {useParams} from "react-router-dom";
-import {professions} from "./Professions";
+import {useContext, useEffect, useState} from "react";
+import {addProfessionFavourite, deleteProfessionFavourite, getProfessionByID} from "../../service/professions";
+import AccountContext from "../../service/accounts";
 
 export default function Profession() {
-    let {id} = useParams();
+    const {id} = useParams();
+    const account = useContext(AccountContext);
+    const [profession, setProfession] = useState();
+    useEffect(() => {
+        getProfessionByID(id, account.account?.login).then(setProfession)
+    }, [account.account]);
+    const changeRating = (professionID, newRating) => {
+        setProfession(pr => ({...pr, is_favourite: newRating}));
+        (newRating === 1 ? addProfessionFavourite : deleteProfessionFavourite)(account.account.login, professionID)
+            .then(() => getProfessionByID(professionID, account.account.login))
+            .then(newPr => setProfession(newPr));
+    }
+
     return (<SimplePage title="Професия">
-        <ProfessionCard {...professions.find(profession => profession.id === id)}/>
+        {profession && <ProfessionInfo changeRating={changeRating} {...profession}/>}
     </SimplePage>);
 }
