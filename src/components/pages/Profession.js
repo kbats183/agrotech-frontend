@@ -11,7 +11,7 @@ export default function Profession() {
     const [profession, setProfession] = useState();
     useEffect(() => {
         getProfessionByID(id, account.account?.login).then(setProfession)
-    }, [account.account]);
+    }, [id, account.account]);
     const changeRating = (professionID, newRating) => {
         setProfession(pr => ({...pr, is_favourite: newRating}));
         (newRating === 1 ? addProfessionFavourite : deleteProfessionFavourite)(account.account.login, professionID)

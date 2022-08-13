@@ -1,4 +1,11 @@
-import {Alert, Box, Button, Divider, Link, Stack, Tab, Tabs, TextField, Typography} from "@mui/material";
+import Timeline from "@mui/lab/Timeline";
+import TimelineItem from "@mui/lab/TimelineItem";
+import TimelineSeparator from "@mui/lab/TimelineSeparator";
+import TimelineConnector from "@mui/lab/TimelineConnector";
+import TimelineContent from "@mui/lab/TimelineContent";
+import TimelineDot from "@mui/lab/TimelineDot";
+
+import {Alert, Box, Button, Divider, Stack, Tab, Tabs, TextField, Typography} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import {useNavigate} from "react-router-dom";
 import SimplePage from "../SimplePage";
@@ -122,18 +129,18 @@ function ProfileDetails({account}) {
             </Stack>
         </Box>
 
-        <Divider sx={{my: 1}}/>
+        {/*<Divider sx={{my: 1}}/>*/}
 
-        <Box>
-            <Typography variant="h6">Способности</Typography>
-            <Box sx={{mt: 1, mb: 2}}>
-                <Button component="button" variant="contained" onClick={() => navigate("/skillsTest")}
-                        endIcon={<QuizIcon/>}>
-                    Узнать
-                </Button>
-                {/*Одно, второе, третье и еще что-то.*/}
-            </Box>
-        </Box>
+        {/*<Box>*/}
+        {/*    <Typography variant="h6">Способности</Typography>*/}
+        {/*    <Box sx={{mt: 1, mb: 2}}>*/}
+        {/*        <Button component="button" variant="contained" onClick={() => navigate("/skillsTest")}*/}
+        {/*                endIcon={<QuizIcon/>}>*/}
+        {/*            Узнать*/}
+        {/*        </Button>*/}
+        {/*        /!*Одно, второе, третье и еще что-то.*!/*/}
+        {/*    </Box>*/}
+        {/*</Box>*/}
 
         {/*<Divider sx={{my: 1}}/>*/}
 

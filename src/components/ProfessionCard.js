@@ -4,7 +4,7 @@ import AccountContext from "../service/accounts";
 import {useContext, useState} from "react";
 
 const RatingStar = ({id, is_favourite, changeRating}) => {
-    const [loginSuggestionAnchor,setLoginSuggestionAnchor] = useState();
+    const [loginSuggestionAnchor, setLoginSuggestionAnchor] = useState();
     const loginSuggestionId = loginSuggestionAnchor ? 'login-suggestion-popover' : undefined;
     const account = useContext(AccountContext);
     const onChangeRating = (e, newValue) => {
@@ -26,7 +26,8 @@ const RatingStar = ({id, is_favourite, changeRating}) => {
                 horizontal: 'right',
             }}
         >
-            <Typography sx={{ p: 2 }}>Войдите в профиль или зарегистрируйтесь, чтобы отмечать понравившиеся професии</Typography>
+            <Typography sx={{p: 2}}>Войдите в профиль или зарегистрируйтесь, чтобы отмечать понравившиеся
+                професии</Typography>
         </Popover>
     </Box>);
 }
@@ -71,8 +72,9 @@ export const ProfessionSmallCard = ({
         </PureLink>
         <Box sx={{display: "flex", width: "calc(70% - 40px)", flexDirection: "column"}}>
             <CardContent sx={{pl: 2}}>
-                <PureLink to={"/profession/" + id}><Typography gutterBottom variant="h6"
-                                                               sx={{mb: 0}}>{name}</Typography></PureLink>
+                <PureLink to={"/profession/" + id}>
+                    <Typography gutterBottom variant="h6" sx={{mb: 0, textDecoration: "underline"}}>{name}</Typography>
+                </PureLink>
                 <Typography gutterBottom variant="caption">
                     {short_description ? short_description : cutBySuggestions(description)}
                 </Typography>
@@ -124,7 +126,7 @@ export const ProfessionInfo = ({
         </Typography>
 
         <Box sx={{width: 1, my: 1}}>
-            <img style={{width: "100%"}} src={image}/>
+            <img style={{width: "100%"}} src={image} alt={name}/>
         </Box>
 
         <PartHeader>Обязанности</PartHeader>

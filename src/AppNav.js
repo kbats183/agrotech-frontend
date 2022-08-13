@@ -2,14 +2,17 @@ import {AppBar, Box, Button, Container, IconButton, Menu, MenuItem, Stack, Toolb
 import MenuIcon from "@mui/icons-material/Menu";
 import PersonIcon from "@mui/icons-material/Person";
 import {useNavigate} from "react-router-dom";
-import {useState} from "react";
+import {useContext, useState} from "react";
+import AccountContext from "./service/accounts";
 
 const pages = [
-    ["Каталог профессий", "profession"],
+    ["Все Профессии", "profession"],
+    ["Выбрать профессию", "chooseProfession", true],
     ["Профиль", "profile"],
 ];
 
 export default function AppNav() {
+    const {account} = useContext(AccountContext);
     const navigate = useNavigate();
     const [anchorElNav, setAnchorElNav] = useState(null);
     const handleOpenNavMenu = (event) => setAnchorElNav(event.currentTarget);
@@ -34,7 +37,9 @@ export default function AppNav() {
                           }} open={Boolean(anchorElNav)}
                           onClose={handleCloseNavMenu}
                           sx={{display: {xs: "block", md: "none"}}}>
-                        {pages.map(([name, url]) => (
+                        {pages
+                            .filter(([, , needLogin]) => account || !needLogin)
+                            .map(([name, url]) => (
                             <MenuItem key={url} onClick={() => {
                                 navigate(url);
                                 handleCloseNavMenu();
@@ -56,7 +61,9 @@ export default function AppNav() {
                     </Typography>
                 </Box>
                 <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
-                    {pages.slice(0, -1).map(([name, url]) =>
+                    {pages.slice(0, -1)
+                        .filter(([, , needLogin]) => account || !needLogin)
+                        .map(([name, url]) =>
                         <Button key={url} onClick={() => navigate(url)}
                                 sx={{my: 2, color: "white", display: "block"}}>
                             {name}

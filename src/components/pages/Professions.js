@@ -1,5 +1,5 @@
 import SimplePage from "../SimplePage";
-import {ProfessionInfo, ProfessionSmallCard} from "../ProfessionCard";
+import {ProfessionSmallCard} from "../ProfessionCard";
 import {useContext, useEffect, useState} from "react";
 import {
     addProfessionFavourite,
@@ -28,7 +28,7 @@ export default function Professions() {
             .then(newPr => setProfessions(prs => prs.map(pr => pr.id === professionID ? newPr : pr)));
     }
 
-    return (<SimplePage title="Каталог профессий">
+    return (<SimplePage title="Все профессии">
         {professions !== undefined && professions
             .map((e, ind) => ({...e, image: professionImages[ind % 3]}))
             .map(profession => <ProfessionSmallCard key={profession.id} changeRating={changeRating} {...profession}/>)}
