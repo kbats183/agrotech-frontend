@@ -168,7 +168,7 @@ export default function CV() {
             }
         });
     }
-    return (<SimplePage title="Изменить профиль">
+    return (<SimplePage title="Составить резюме">
         {data !== undefined && <CVForm data={data} updateField={updateField}/>}
 
         {data !== undefined && saveProcess === "fail" &&

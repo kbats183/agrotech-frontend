@@ -17,6 +17,7 @@ import SimplePage from "../SimplePage";
 import FormLine from "../FormLine";
 import {getRegions} from "../../service/regions";
 import {getAllProfessions} from "../../service/professions";
+import {useNavigate} from "react-router-dom";
 
 const fixSchoolClass = (data) => {
     const newData = {...data};
@@ -30,6 +31,7 @@ const fixSchoolClass = (data) => {
 }
 
 export default function EditProfile({account}) {
+    const navigate = useNavigate();
     const [data, setData] = useState(account.account);
     const [saveProcess, setSaveProcess] = useState(undefined);
 
@@ -38,7 +40,14 @@ export default function EditProfile({account}) {
     const save = () => {
         setSaveProcess("loading");
         account.updateProfile(fixSchoolClass(data))
-            .then(r => r ? setSaveProcess(undefined) : setSaveProcess("fail"))
+            .then(r => {
+                if (r) {
+                    setSaveProcess(undefined);
+                    navigate("/profile");
+                } else {
+                    setSaveProcess("fail");
+                }
+            })
     }
 
     const [professions, setProfessions] = useState();
