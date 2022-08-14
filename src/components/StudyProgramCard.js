@@ -95,14 +95,14 @@ export const StudyProgramInfo = ({
             </Box>
         </Card>
 
-        <PartHeader>Обязанности</PartHeader>
+        <PartHeader>Изучаемые дисциплины</PartHeader>
         <ListOrSimpleText content={specialisation_disciplines}/>
 
         <PartHeader>Условия поступления</PartHeader>
         <Typography>
             Минимальный балл ЕГЭ для поступления на бюджет: {score_budget}<br/>
             Минимальный балл ЕГЭ для поступления на котракт: {score_contract}<br/>
-            Стоимость контрактного обучения: {score_contract}<br/>
+            Стоимость контрактного обучения: {contract_amount}<br/>
         </Typography>
         <Typography sx={{mt: 1}}>
             Возможные наборы экзаменов:<br/>
