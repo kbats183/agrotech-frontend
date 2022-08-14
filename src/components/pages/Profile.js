@@ -138,13 +138,27 @@ const WhatNext = ({step}) => {
                 icon: <Done color="primary"/>,
             },
         ]}/>}
-        <Box sx={{mt: 1, mb: 2}}>
-            <Button component="button" variant="contained"
-                    endIcon={<QuizIcon/>}>
-                Узнать
-            </Button>
-            {/*Одно, второе, третье и еще что-то.*/}
-        </Box>
+        {step === 2 && <SimpleTimeline withIcon={true} elements={[
+            {
+                text: "Изучи вакансии в агротехнической отрасли",
+                icon: <Menu color="primary"/>,
+            },
+            {
+                text: "Составь резюме и отпраь его работадателю",
+                icon: <HistoryEdu color="primary"/>,
+            },
+            {
+                text: "Пройди практику и получи первый опыт в агротехнической компаний",
+                icon: <TrendingUp color="primary"/>,
+            },
+        ]}/>}
+        {/*<Box sx={{mt: 1, mb: 2}}>*/}
+        {/*    <Button component="button" variant="contained"*/}
+        {/*            endIcon={<QuizIcon/>}>*/}
+        {/*        Узнать*/}
+        {/*    </Button>*/}
+        {/*    /!*Одно, второе, третье и еще что-то.*!/*/}
+        {/*</Box>*/}
     </>);
 }
 
