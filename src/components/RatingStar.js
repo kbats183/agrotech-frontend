@@ -26,6 +26,7 @@ export const RatingStar = ({id, is_favourite, changeRating, subjectName}) => {
             }}
         >
             <Typography sx={{p: 2}}>Войдите в профиль или зарегистрируйтесь, чтобы отмечать понравившиеся
+                {" "}
                 {subjectName}</Typography>
         </Popover>
     </Box>);

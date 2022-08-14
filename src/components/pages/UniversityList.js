@@ -20,6 +20,6 @@ export default function UniversityList() {
 
     return (<SimplePage title="Все профессии">
         {universityList !== undefined && universityList
-            .map(profession => <UniversityCard key={profession.id} {...profession}/>)}
+            .map(u => <UniversityCard key={u.id} {...u}/>)}
     </SimplePage>);
 }

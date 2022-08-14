@@ -17,6 +17,8 @@ import StudyProgram from "./components/pages/StudyProgram";
 import UniversityList from "./components/pages/UniversityList";
 import University from "./components/pages/University";
 import StudyProgramsByProfession from "./components/pages/StudyProgramsByProfession";
+import Vacancies from "./components/pages/Vacancies";
+import CV from "./components/pages/CV";
 
 function App() {
     const account = useAccount();
@@ -48,6 +50,11 @@ function App() {
                                 <Route path="/skillsTest" element={account.account ? <SkillsTest/> : redirectToLogin}/>
                                 <Route path="/university" element={<UniversityList/>}/>
                                 <Route path="/university/:id" element={<University/>}/>
+                                <Route path="/vacancies" element={<Vacancies/>}/>
+                                <Route path="/vacancies/:id" element={<Vacancies/>}/>
+                                <Route path="/cv"
+                                       element={account.account ? <CV/> : redirectToLogin}/>
+
                             </Routes>
                         </Container>
                     </div>

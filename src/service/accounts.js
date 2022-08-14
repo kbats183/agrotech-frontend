@@ -58,9 +58,23 @@ export const useAccount = () => {
             return;
         }
         authorize(userToken);
-    }, [userToken])
+    }, [userToken]);
+    const getCV = () =>
+        userFetch(account.login + "/cv")
+            .then(r => r.json());
+    const updateCV = (data) =>
+        userFetch(account.login + "/cv", "POST", data)
+            .then(async response => {
+                if (!response.ok) {
+                    return undefined;
+                } else {
+                    const resp = await response.json();
+                    setAccount(resp)
+                    return resp;
+                }
+            });
 
-    return {account, registration, authorize, logout, updateProfile};
+    return {account, registration, authorize, logout, updateProfile, getCV, updateCV};
 };
 
 export const AccountContext = createContext({});

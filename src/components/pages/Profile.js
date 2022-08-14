@@ -21,8 +21,8 @@ function Authorization({account}) {
     const login = () =>
         account.authorize(loginLogin).then(acc => setIsInvalidLogin(acc === undefined));
 
-    const registration = () => account.registration(regData)
-        .than(r => setIsInvalidRegistration(r === undefined));
+    const registration = () =>
+        account.registration(regData).than(r => setIsInvalidRegistration(r === undefined));
     const [isInvalidRegistration, setIsInvalidRegistration] = useState(false);
 
     return (<SimplePage title="Профиль">
@@ -158,7 +158,8 @@ function ProfileDetails({account}) {
             {user.step === 0 && "Школьник"}
             {user.step === 1 && "Выпускник"}
             {(user.step === 0 || user.step === 1) && (user.school_class && ", " + user.school_class + " класс")}
-            {user.step === 2 && "Студент, "}
+            {user.step === 2 && "Студент"}
+            {user.step === 2 && (user.university_name && ", " + user.university_name)}
         </Typography>
 
         <Box sx={{mt: 1, mb: 2}}>

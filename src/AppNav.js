@@ -6,12 +6,16 @@ import {useContext, useState} from "react";
 import AccountContext from "./service/accounts";
 
 const pages = [
-    ["Профессии", "profession", true],
+    ["Профессии", "profession", 0],
+    ["Профессии", "profession", 1],
+    ["Профессии", "profession", undefined],
     ["Понравившиеся профессии", "profession/favourite", 0],
     ["Где учиться", "studyPrograms", 0],
     ["Тест способностей", "chooseProfession", 1],
     ["Университеты", "university", 1],
     ["Университеты", "university", undefined],
+    ["Вакансии", "vacancies", 2],
+    ["Составить резюме", "cv", 2],
     ["Профиль", "profile", true],
 ];
 

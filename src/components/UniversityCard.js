@@ -14,7 +14,8 @@ export const UniversityCard = ({
                                    ...props
                                }) => {
     return (<Card sx={{display: "flex", my: 1, alignItems: "stretch"}} {...props}>
-        <CardMedia sx={{width: 0.3, display: {xs: "none", sm: "block"}}} component="div" image={image}>
+        <CardMedia sx={{width: 0.3, display: {xs: "none", sm: "block"}, minHeight: 150
+        }} component="div" image={image}>
             <PureLink to={"/university/" + id} style={{display: "flex", width: "100%", height: "100%"}}/>
         </CardMedia>
         <Box sx={{display: "flex", width: {xs: 1, sm: 0.7}, flexDirection: "column"}}>

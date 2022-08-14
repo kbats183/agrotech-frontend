@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import {
     Alert,
     Box,
@@ -15,6 +15,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from "@mui/icons-material/Save";
 import SimplePage from "../SimplePage";
 import FormLine from "../FormLine";
+import {getRegions} from "../../service/regions";
+import {getAllProfessions} from "../../service/professions";
 
 const fixSchoolClass = (data) => {
     const newData = {...data};
@@ -39,6 +41,11 @@ export default function EditProfile({account}) {
             .then(r => r ? setSaveProcess(undefined) : setSaveProcess("fail"))
     }
 
+    const [professions, setProfessions] = useState();
+    useEffect(() => {
+        getAllProfessions().then(setProfessions)
+    }, []);
+
     return (<SimplePage title="Изменить профиль">
         <FormLine><TextField
             required
@@ -61,6 +68,21 @@ export default function EditProfile({account}) {
             onChange={updateField("patronymic")}
             fullWidth
         /></FormLine>
+
+        <FormLine>
+            <FormControl fullWidth>
+                <InputLabel id="profile-region-select-label">Регион</InputLabel>
+                <Select
+                    labelId="profile-region-select-label"
+                    id="profile-region-select"
+                    value={data?.region}
+                    label="Регион"
+                    onChange={updateField("region")}
+                >
+                    {getRegions().map(r => <MenuItem key={r.id} value={r.id}>{r.name}</MenuItem>)}
+                </Select>
+            </FormControl>
+        </FormLine>
 
         <FormLine>
             <FormControl>
@@ -91,13 +113,48 @@ export default function EditProfile({account}) {
             </FormControl>
         </FormLine>}
 
-        {data.step !== undefined && <FormLine>
+        {(data.step === 0 || data.step === 1) && <FormLine>
             <TextField
                 label="Название школы"
                 defaultValue={data.school_name ?? ""}
                 onChange={updateField("school_name")}
                 fullWidth
             />
+        </FormLine>}
+
+
+        {data.step === 2 && <FormLine>
+            <TextField
+                label="Название учебного заведения"
+                defaultValue={data.university_name ?? ""}
+                onChange={updateField("university_name")}
+                fullWidth
+            />
+        </FormLine>}
+
+        {data.step === 2 && <FormLine>
+            <TextField
+                label="Образовательная программа"
+                defaultValue={data.university_study_program ?? ""}
+                onChange={updateField("university_study_program")}
+                fullWidth
+            />
+        </FormLine>}
+
+        {data.step === 2 && <FormLine>
+            <FormControl fullWidth>
+                <InputLabel id="profile-region-select-label">Выбранная профессия</InputLabel>
+                <Select
+                    labelId="profile-region-select-label"
+                    id="profile-region-select"
+                    defaultValue={data.university_profession ?? ""}
+                    onChange={updateField("university_profession")}
+                    label="Выбранная профессия"
+                >
+                    {professions !== undefined && professions.map(r =>
+                        <MenuItem key={r.id} value={r.id}>{r.name}</MenuItem>)}
+                </Select>
+            </FormControl>
         </FormLine>}
 
         {saveProcess === "fail" && <Alert severity="error">Не удалось сохранить изменения профиля!</Alert>}
