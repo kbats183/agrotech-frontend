@@ -24,8 +24,8 @@ export const StudyProgramsByProfession = () => {
     }, [profession_id, account]);
     const changeRating = (program, newRating) => {
         setStudyPrograms(prs => prs.map(pr => pr.id === program ? {...pr, is_favourite: newRating} : pr));
-        (newRating === 1 ? addStudyProgramFavourite : deleteStudyProgramFavourite)(account.login, program)
-            .then(() => getStudyProgramByID(program, account.login))
+        (newRating === 1 ? addStudyProgramFavourite : deleteStudyProgramFavourite)(account?.login, program)
+            .then(() => getStudyProgramByID(program, account?.login))
             .then(newPr => setStudyPrograms(prs => prs.map(pr => pr.id === program ? newPr : pr)));
     }
 
@@ -34,8 +34,8 @@ export const StudyProgramsByProfession = () => {
             Список направлений обучения
             {profession && " профессии «" + profession.name + "»"}
         </Typography>}
-        {studyPrograms?.length > 0 && studyPrograms.map(p => <StudyProgramCard key={p.id} {...p}
-                                                                               changeRating={changeRating}/>)}
+        {studyPrograms?.length > 0 && studyPrograms.map((p, index) =>
+            <StudyProgramCard key={index} {...p} changeRating={changeRating}/>)}
     </SimplePage>);
 }
 

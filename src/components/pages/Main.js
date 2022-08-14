@@ -1,44 +1,34 @@
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-import TimelineOppositeContent from "@mui/lab/TimelineOppositeContent";
 import SimplePage from "../SimplePage";
+import {Typography} from "@mui/material";
+import {Work, School, TrendingUp} from "@mui/icons-material";
+import SimpleTimeline from "../SimpleTimeline";
 
 export default function Main() {
     return (<SimplePage>
-        <Timeline position="alternate">
-            <TimelineItem>
-                <TimelineOppositeContent color="text.secondary">
-                    Школьник старших класссов
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                    <TimelineDot/>
-                    <TimelineConnector/>
-                </TimelineSeparator>
-                <TimelineContent>Развивай свои навыки и способности</TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-                <TimelineOppositeContent color="text.secondary">
-                    Выпускник школы
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                    <TimelineDot/>
-                    <TimelineConnector/>
-                </TimelineSeparator>
-                <TimelineContent>Выбери подходящую профессию</TimelineContent>
-            </TimelineItem>
-            <TimelineItem>
-                <TimelineOppositeContent color="text.secondary">
-                    Студент
-                </TimelineOppositeContent>
-                <TimelineSeparator>
-                    <TimelineDot/>
-                </TimelineSeparator>
-                <TimelineContent>Учись и проходи практику у потенциальных работодателей</TimelineContent>
-            </TimelineItem>
-        </Timeline>
+        <Typography variant="h4">Стань специалистом в агротехнической области!</Typography>
+        <Typography>
+            Сельское хозяйство в XXI веке стремительно развивает. Как никогда эта отрасаль нуждается в
+            квалифицированных кадры.
+        </Typography>
+        <Typography>
+            Этот сервис поможет с выбором професии, образовательной программы, учебного заведения и будущего работодателя.
+        </Typography>
+        <SimpleTimeline withIcon={true} elements={[
+            {
+                text: ["Развивай свои навыки и способности",
+                    <Typography variant="title" component="p">Школьник старших класссов</Typography>],
+                icon: <TrendingUp color="primary"/>,
+            },
+            {
+                text: ["Выбери подходящую профессию",
+                    <Typography variant="title" component="p">Выпускник школы</Typography>],
+                icon: <School color="primary"/>,
+            },
+            {
+                text: ["Учись и проходи практику у потенциальных работодателей",
+                    <Typography variant="title" component="p">Студент</Typography>],
+                icon: <Work color="primary"/>,
+            },
+        ]}/>
     </SimplePage>);
 }

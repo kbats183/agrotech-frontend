@@ -102,6 +102,9 @@ const WhatNext = ({step}) => {
     return (<>
         <Divider sx={{my: 2}}/>
         <Typography variant="h5">Что дальше?</Typography>
+        {(step === undefined || step === null) && <Typography>
+            Укажи информацию о себе в настройках профиля!
+        </Typography>}
         {step === 0 && <SimpleTimeline withIcon={true} elements={[
             {
                 text: "Изучи профессии, необходимые в агротехнической области",

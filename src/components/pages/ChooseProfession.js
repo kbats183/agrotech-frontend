@@ -52,17 +52,17 @@ export const ChooseProfession = () => {
 
         {answersCount > 0 && <Box>
             <Typography variant={"h5"}>
-                Больше всего вам подходят следующие професси
+                По результатам теста, больше всего вам подходят следующие професси
             </Typography>
-            {professions && professions.map(profession =>
-                <ProfessionSmallCard key={profession.id} changeRating={changeRating} {...profession}/>)}
-
-            <Box sx={{mt: 4}}>
+            <Box sx={{mt: 2, mb: 3}}>
                 <Button
                     variant="contained"
                     endIcon={<Quiz/>}
                     onClick={() => navigate("/skillsTest")}>Пройти тест повторно</Button>
             </Box>
+
+            {professions && professions.map(profession =>
+                <ProfessionSmallCard key={profession.id} changeRating={changeRating} {...profession}/>)}
         </Box>}
     </SimplePage>)
 };

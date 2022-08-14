@@ -106,10 +106,10 @@ export const StudyProgramInfo = ({
         </Typography>
         <Typography sx={{mt: 1}}>
             Возможные наборы экзаменов:<br/>
-            {exams.map((e, index) => (<>
+            {exams.map((e, index) => (<Typography component="span" key={index}>
                 {getExamSubjectsByMask(e).join(" + ")}
                 {index + 1 < exams.length && <br/>}
-            </>))}
+            </Typography>))}
         </Typography>
     </Box>);
 };

@@ -14,12 +14,12 @@ export const StudyProgram = () => {
     const {id} = useParams();
     const [studyProgram, setStudyProgram] = useState();
     useEffect(() => {
-        getStudyProgramByID(id, account.login).then(setStudyProgram);
+        getStudyProgramByID(id, account?.login ?? "").then(setStudyProgram);
     }, [account, id]);
     const changeRating = (professionID, newRating) => {
         setStudyProgram(pr => ({...pr, is_favourite: newRating}));
-        (newRating === 1 ? addStudyProgramFavourite : deleteStudyProgramFavourite)(account.account.login, professionID)
-            .then(() => getStudyProgramByID(professionID, account.account.login))
+        (newRating === 1 ? addStudyProgramFavourite : deleteStudyProgramFavourite)(account.login, professionID)
+            .then(() => getStudyProgramByID(professionID, account.login))
             .then(newPr => setStudyProgram(newPr));
     }
 
