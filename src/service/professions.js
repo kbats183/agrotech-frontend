@@ -6,6 +6,10 @@ export const getAllProfessions = (login) =>
     (login ? fetch(apiPath + "favourite/" + login) : fetch(apiPath))
         .then(r => r.json());
 
+export const getAllFavouriteProfessions = (login) =>
+    fetch(apiPath + "favourite/" + login + "/only")
+        .then(r => r.json());
+
 export const getProfessionByID = (id, login) =>
     (login ? fetch(apiPath + id + "/favourite/" + login) : fetch(apiPath + id))
         .then(r => r.json());

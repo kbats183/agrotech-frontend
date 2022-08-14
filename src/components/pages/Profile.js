@@ -1,10 +1,3 @@
-import Timeline from "@mui/lab/Timeline";
-import TimelineItem from "@mui/lab/TimelineItem";
-import TimelineSeparator from "@mui/lab/TimelineSeparator";
-import TimelineConnector from "@mui/lab/TimelineConnector";
-import TimelineContent from "@mui/lab/TimelineContent";
-import TimelineDot from "@mui/lab/TimelineDot";
-
 import {Alert, Box, Button, Divider, Stack, Tab, Tabs, TextField, Typography} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import {useNavigate} from "react-router-dom";
@@ -14,6 +7,8 @@ import FormLine from "../FormLine";
 import TabPanel from "../TabPanel";
 import LogoutIcon from "@mui/icons-material/Logout";
 import {useState} from "react";
+import SimpleTimeline from "../SimpleTimeline";
+import {HistoryEdu, School, TrendingUp, Visibility, Menu, Done, Star} from "@mui/icons-material";
 
 function Authorization({account}) {
     const [authMode, setAuthMode] = useState(0);
@@ -102,6 +97,57 @@ function Authorization({account}) {
     </SimplePage>);
 }
 
+
+const WhatNext = ({step}) => {
+    return (<>
+        <Divider sx={{my: 2}}/>
+        <Typography variant="h5">Что дальше?</Typography>
+        {step === 0 && <SimpleTimeline withIcon={true} elements={[
+            {
+                text: "Изучи профессии, необходимые в агротехнической области",
+                icon: <Visibility color="primary"/>,
+            },
+            {
+                text: "Отметь понравившиеся профессии, чтобы узнать о них больше",
+                icon: <Star  color="primary"/>,
+            },
+            {
+                text: "Развивай навыки, необходимые для получения образования по выбранной специальности",
+                icon: <TrendingUp  color="primary"/>,
+            },
+            {
+                text: "Выбери предметы ЕГЭ, которые необходимо сдать для поступления",
+                icon: <HistoryEdu color="primary"/>,
+            },
+        ]}/>}
+        {step === 1 && <SimpleTimeline withIcon={true} elements={[
+            {
+                text: "Протестируй способности, чтобы найти наиболее подходящие агротехнические профессии",
+                icon: <QuizIcon color="primary"/>,
+            },
+            {
+                text: "Выбери понравившуюся профессию",
+                icon: <Menu color="primary"/>,
+            },
+            {
+                text: "Выбери университет, в котором можно получать выбранную профессию",
+                icon: <School color="primary"/>,
+            },
+            {
+                text: "Поступи в университет и стань квалифицированным специалистом",
+                icon: <Done color="primary"/>,
+            },
+        ]}/>}
+        <Box sx={{mt: 1, mb: 2}}>
+            <Button component="button" variant="contained"
+                    endIcon={<QuizIcon/>}>
+                Узнать
+            </Button>
+            {/*Одно, второе, третье и еще что-то.*/}
+        </Box>
+    </>);
+}
+
 function ProfileDetails({account}) {
     const navigate = useNavigate();
     const user = account.account;
@@ -128,6 +174,8 @@ function ProfileDetails({account}) {
 
             </Stack>
         </Box>
+
+        {user?.step !== undefined && <WhatNext step={user.step}/>}
 
         {/*<Divider sx={{my: 1}}/>*/}
 

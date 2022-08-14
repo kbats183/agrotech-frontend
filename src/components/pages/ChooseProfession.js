@@ -3,8 +3,6 @@ import AccountContext from "../../service/accounts";
 import SimplePage from "../SimplePage";
 import {getAllProfessionsByTest, getTestAnswersCount} from "../../service/tests";
 import {Box, Button, Typography} from "@mui/material";
-import LoadingButton from "@mui/lab/LoadingButton";
-import SaveIcon from "@mui/icons-material/Save";
 import {Quiz} from "@mui/icons-material";
 import {useNavigate} from "react-router-dom";
 import {ProfessionSmallCard} from "../ProfessionCard";
@@ -36,7 +34,7 @@ export const ChooseProfession = () => {
         }
     }, [account]);
 
-    return (<SimplePage title={"Выбрать профессию"}>
+    return (<SimplePage title={"Тест способностей"}>
         {answersCount === 0 && <Box>
             <Typography variant={"h5"}>
                 Выбери професиию мечты!

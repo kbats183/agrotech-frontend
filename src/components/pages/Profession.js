@@ -4,14 +4,19 @@ import {useParams} from "react-router-dom";
 import {useContext, useEffect, useState} from "react";
 import {addProfessionFavourite, deleteProfessionFavourite, getProfessionByID} from "../../service/professions";
 import AccountContext from "../../service/accounts";
+import {getStudyProgramsByProfessionID} from "../../service/study_programs";
 
 export default function Profession() {
     const {id} = useParams();
     const account = useContext(AccountContext);
     const [profession, setProfession] = useState();
+    const [studyPrograms, setStudyPrograms] = useState();
     useEffect(() => {
         getProfessionByID(id, account.account?.login).then(setProfession)
     }, [id, account.account]);
+    useEffect(() => {
+        getStudyProgramsByProfessionID(id).then(setStudyPrograms);
+    }, [id]);
     const changeRating = (professionID, newRating) => {
         setProfession(pr => ({...pr, is_favourite: newRating}));
         (newRating === 1 ? addProfessionFavourite : deleteProfessionFavourite)(account.account.login, professionID)
@@ -20,6 +25,6 @@ export default function Profession() {
     }
 
     return (<SimplePage title="Професия">
-        {profession && <ProfessionInfo changeRating={changeRating} {...profession}/>}
+        {profession && <ProfessionInfo changeRating={changeRating} studyPrograms={studyPrograms} {...profession}/>}
     </SimplePage>);
 }

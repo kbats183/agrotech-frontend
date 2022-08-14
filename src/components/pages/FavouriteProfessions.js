@@ -3,17 +3,17 @@ import {ProfessionSmallCard} from "../ProfessionCard";
 import {useContext, useEffect, useState} from "react";
 import {
     addProfessionFavourite,
-    deleteProfessionFavourite,
-    getAllProfessions,
+    deleteProfessionFavourite, getAllFavouriteProfessions,
     getProfessionByID
 } from "../../service/professions";
 import {AccountContext} from "../../service/accounts";
+import {Typography} from "@mui/material";
 
-export default function Professions() {
+export default function FavouriteProfessions() {
     const {account} = useContext(AccountContext);
-    const [professions, setProfessions] = useState([]);
+    const [professions, setProfessions] = useState();
     const loadProfessions = () => {
-        getAllProfessions(account?.login).then(prs => setProfessions(prs));
+        getAllFavouriteProfessions(account?.login).then(prs => setProfessions(prs));
     };
     useEffect(loadProfessions, [account]);
     const changeRating = (professionID, newRating) => {
@@ -23,8 +23,10 @@ export default function Professions() {
             .then(newPr => setProfessions(prs => prs.map(pr => pr.id === professionID ? newPr : pr)));
     }
 
-    return (<SimplePage title="Все профессии">
+    return (<SimplePage title="Понравившиеся профессии">
         {professions !== undefined && professions
             .map(profession => <ProfessionSmallCard key={profession.id} changeRating={changeRating} {...profession}/>)}
+        {professions?.length === 0 && <Typography variant="h5">У вас пока выбрана нет понравившихся профессий</Typography>}
+        {professions?.length === 0 && <Typography>Откройте список всех профессий и пометьте понравившиеся звездочкой напрости в названия.</Typography>}
     </SimplePage>);
 }

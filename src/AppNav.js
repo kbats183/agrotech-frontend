@@ -6,9 +6,13 @@ import {useContext, useState} from "react";
 import AccountContext from "./service/accounts";
 
 const pages = [
-    ["Все Профессии", "profession"],
-    ["Выбрать профессию", "chooseProfession", true],
-    ["Профиль", "profile"],
+    ["Профессии", "profession", true],
+    ["Понравившиеся профессии", "profession/favourite", 0],
+    ["Где учиться", "studyPrograms", 0],
+    ["Тест способностей", "chooseProfession", 1],
+    ["Университеты", "university", 1],
+    ["Университеты", "university", undefined],
+    ["Профиль", "profile", true],
 ];
 
 export default function AppNav() {
@@ -38,15 +42,15 @@ export default function AppNav() {
                           onClose={handleCloseNavMenu}
                           sx={{display: {xs: "block", md: "none"}}}>
                         {pages
-                            .filter(([, , needLogin]) => account || !needLogin)
+                            .filter(([, , step]) => step === true || account?.step === step)
                             .map(([name, url]) => (
-                            <MenuItem key={url} onClick={() => {
-                                navigate(url);
-                                handleCloseNavMenu();
-                            }}>
-                                <Typography textAlign="center">{name}</Typography>
-                            </MenuItem>
-                        ))}
+                                <MenuItem key={url} onClick={() => {
+                                    navigate(url);
+                                    handleCloseNavMenu();
+                                }}>
+                                    <Typography textAlign="center">{name}</Typography>
+                                </MenuItem>
+                            ))}
                     </Menu>
                 </Box>
                 <Typography variant="h6" noWrap component="div" onClick={() => navigate("/")}
@@ -62,12 +66,12 @@ export default function AppNav() {
                 </Box>
                 <Box sx={{flexGrow: 1, display: {xs: "none", md: "flex"}}}>
                     {pages.slice(0, -1)
-                        .filter(([, , needLogin]) => account || !needLogin)
+                        .filter(([, , step]) => step === true || account?.step === step)
                         .map(([name, url]) =>
-                        <Button key={url} onClick={() => navigate(url)}
-                                sx={{my: 2, color: "white", display: "block"}}>
-                            {name}
-                        </Button>)}
+                            <Button key={url} onClick={() => navigate(url)}
+                                    sx={{my: 2, color: "white", display: "block"}}>
+                                {name}
+                            </Button>)}
                 </Box>
                 <Box sx={{flexGrow: 0, display: {xs: "none", md: "flex"}}}>
                     <Stack direction="row" spacing={2}>

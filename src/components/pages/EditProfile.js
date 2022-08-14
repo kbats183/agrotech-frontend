@@ -16,6 +16,16 @@ import SaveIcon from "@mui/icons-material/Save";
 import SimplePage from "../SimplePage";
 import FormLine from "../FormLine";
 
+const fixSchoolClass = (data) => {
+    const newData = {...data};
+    if (data.step === 1 && data.school_class < 8) {
+        newData.school_class = undefined;
+    }
+    if (data.step === 2) {
+        newData.school_class = undefined;
+    }
+    return newData;
+}
 
 export default function EditProfile({account}) {
     const [data, setData] = useState(account.account);
@@ -25,7 +35,8 @@ export default function EditProfile({account}) {
         (e) => setData(d => ({...d, [fieldName]: format(e.target.value)}));
     const save = () => {
         setSaveProcess("loading");
-        account.updateProfile(data).then(r => r ? setSaveProcess(undefined) : setSaveProcess("fail"))
+        account.updateProfile(fixSchoolClass(data))
+            .then(r => r ? setSaveProcess(undefined) : setSaveProcess("fail"))
     }
 
     return (<SimplePage title="Изменить профиль">
@@ -73,8 +84,9 @@ export default function EditProfile({account}) {
                     label="Класс в школе"
                     onChange={updateField("school_class")}
                 >
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map(n =>
-                        <MenuItem value={n} key={n}>{n}</MenuItem>)}
+                    {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+                        .filter(n => data.step === 0 || n > 8)
+                        .map(n => <MenuItem value={n} key={n}>{n}</MenuItem>)}
                 </Select>
             </FormControl>
         </FormLine>}

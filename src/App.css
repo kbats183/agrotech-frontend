@@ -14,7 +14,7 @@ html, body {
 .App {
   flex: 1 0 auto;
   background-color: #fff;
-  padding-bottom: 32px;
+  padding-bottom: 40px;
 }
 
 .Footer {

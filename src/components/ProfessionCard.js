@@ -1,39 +1,22 @@
-import {Box, Card, CardContent, CardMedia, Popover, Rating, Typography} from "@mui/material";
+import {Box, Card, CardContent, CardMedia, Typography} from "@mui/material";
 import {PureLink} from "./PureLink";
-import AccountContext from "../service/accounts";
-import {useContext, useState} from "react";
+import {useMemo} from "react";
+import RatingStar from "./RatingStar";
 
-const RatingStar = ({id, is_favourite, changeRating}) => {
-    const [loginSuggestionAnchor, setLoginSuggestionAnchor] = useState();
-    const loginSuggestionId = loginSuggestionAnchor ? 'login-suggestion-popover' : undefined;
-    const account = useContext(AccountContext);
-    const onChangeRating = (e, newValue) => {
-        if (account.account === undefined) {
-            setLoginSuggestionAnchor(e.target);
-            return;
+const examSubjects = ["Русский язык", "Математика профильная", "Физика", "Информатика", "Биология", "Химия", "География", "Обществознание"];
+export const getExamSubjectsByMask = (mask) => {
+    const subjects = [];
+    let bit = 1;
+    for (const examSubject of examSubjects) {
+        if ((bit & mask) > 0) {
+            subjects.push(examSubject);
         }
-        changeRating(id, newValue);
-    };
-    return (<Box sx={{display: "flex", width: 40, flexDirection: "column"}}>
-        <Rating value={is_favourite ? 1 : 0} max={1} onChange={onChangeRating} aria-describedby={loginSuggestionId}/>
-        <Popover
-            id={loginSuggestionId}
-            open={Boolean(loginSuggestionAnchor)}
-            anchorEl={loginSuggestionAnchor}
-            onClose={() => setLoginSuggestionAnchor(undefined)}
-            anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-            }}
-        >
-            <Typography sx={{p: 2}}>Войдите в профиль или зарегистрируйтесь, чтобы отмечать понравившиеся
-                професии</Typography>
-        </Popover>
-    </Box>);
+        bit *= 2;
+    }
+    return subjects;
 }
 
-
-const SHORT_DESCRIPTION_MAX_LENGTH = 320;
+const SHORT_DESCRIPTION_MAX_LENGTH = 350;
 const cutBySuggestions = (text) => {
     const suggestions = text.split(".");
     let current_text = "";
@@ -66,29 +49,41 @@ export const ProfessionSmallCard = ({
                                         changeRating,
                                         ...props
                                     }) => {
-    return (<Card sx={{display: "flex", alignItems: "center", my: 1}} {...props}>
-        <PureLink to={"/profession/" + id} style={{display: "flex", width: "30%"}}>
-            <CardMedia sx={{width: 1}} component="img" image={image}/>
-        </PureLink>
-        <Box sx={{display: "flex", width: "calc(70% - 40px)", flexDirection: "column"}}>
+    return (<Card sx={{display: "flex", alignItems: "stretch", my: 1}} {...props}>
+        <CardMedia sx={{width: 0.3, display: {xs: "none", sm: "block"}}} component="div" image={image}>
+            <PureLink to={"/profession/" + id} style={{display: "flex", width: "100%", height: "100%"}}/>
+        </CardMedia>
+        <Box sx={{display: "flex", width: {xs: 1, sm: 0.7}, flexDirection: "column"}}>
             <CardContent sx={{pl: 2}}>
-                <PureLink to={"/profession/" + id}>
-                    <Typography gutterBottom variant="h6" sx={{mb: 0, textDecoration: "underline"}}>{name}</Typography>
-                </PureLink>
+                <Box sx={{display: "flex", alignItems: "center"}}>
+                    <Box display="flex" justifyContent="space-between" alignItems="center" sx={{mr: 1, width: 1}}>
+                        <PureLink to={"/profession/" + id}>
+                            <Typography gutterBottom variant="h6" sx={{mb: 0, textDecoration: "underline"}}>
+                                {name}
+                            </Typography>
+                        </PureLink>
+                        <PureLink to={"/studyPrograms/profession/" + id}>
+                            <Typography gutterBottom variant="body2" sx={{mb: 0, textDecoration: "underline"}}>
+                                Где учиться?
+                            </Typography>
+                        </PureLink>
+                    </Box>
+                    <RatingStar id={id} is_favourite={is_favourite} changeRating={changeRating}
+                                subjectName="профессии"/>
+                </Box>
                 <Typography gutterBottom variant="caption">
                     {short_description ? short_description : cutBySuggestions(description)}
                 </Typography>
             </CardContent>
         </Box>
-        <RatingStar id={id} is_favourite={is_favourite} changeRating={changeRating}/>
     </Card>);
 };
 
-const PartHeader = ({children}) =>
+export const PartHeader = ({children}) =>
     (<Typography variant="h5" sx={{mt: 2}}>{children}</Typography>);
 
-const ListOrSimpleText = ({content}) => {
-    const elements = content.split("\n");
+export const ListOrSimpleText = ({content}) => {
+    const elements = Array.isArray(content) ? content : content.split("\n");
     if (elements.length === 1) {
         return (<Typography>{content}</Typography>);
     }
@@ -105,27 +100,50 @@ export const ProfessionInfo = ({
                                    required_skills,
                                    relevance,
                                    image,
+                                   studyPrograms,
                                    is_favourite,
                                    changeRating
                                }) => {
     image = image ?? "https://www.sgau.ru/files/pages/42774/1578630426general_pages_10_january_2020_i42774_selskoxozyaistvennoe_predpr.jpg";
+
+    const [examSubjects, universityWithPrograms] = useMemo(() => {
+        const subjects = new Map();
+        studyPrograms?.forEach(p => p.exams.forEach(m => getExamSubjectsByMask(m)
+            .forEach(e => subjects.set(e, (subjects.get(e) ?? 0) + 1))));
+        const university = new Map();
+        studyPrograms?.map(p => p.university_name)?.forEach(e => university.set(e, (university.get(e) ?? 0) + 1));
+        return [
+            Array.from(subjects).sort(([, x], [, y]) => y - x).map(([x,]) => x),
+            Array.from(university).sort(([, x], [, y]) => y - x).map(([x,]) => x),
+        ];
+    }, [studyPrograms]);
+
     return (<Box>
         <Box sx={{display: "flex", alignItems: "center", my: 1}}>
-            {/*<Box sx={{}}>*/}
-            <Typography gutterBottom variant="h3" sx={{
+            <Typography gutterBottom variant="h4" sx={{
                 mb: 0,
                 display: "flex",
                 width: "calc(100% - 40px)",
                 flexDirection: "column"
             }}>{name}</Typography>
-            <RatingStar id={id} is_favourite={is_favourite} changeRating={changeRating}/>
+            <RatingStar id={id} is_favourite={is_favourite} changeRating={changeRating} subjectName="профессии"/>
         </Box>
 
         <Typography>
             {description}
         </Typography>
 
-        <Box sx={{width: 1, my: 1}}>
+        {examSubjects?.length > 0 && <>
+            <PartHeader>Предметы в школе, с которыми связана профессия</PartHeader>
+            <ListOrSimpleText content={examSubjects}/>
+        </>}
+
+        {universityWithPrograms?.length > 0 && <>
+            <PartHeader>Университеты, в которых можно получить такую специальность</PartHeader>
+            <ListOrSimpleText content={universityWithPrograms}/>
+        </>}
+
+        <Box sx={{width: 1, my: 2, mt: 4}}>
             <img style={{width: "100%"}} src={image} alt={name}/>
         </Box>
 
